@@ -1,7 +1,7 @@
 {
   "name": "@toojs/vuex-loading",
   "description": "A loading plugin for vuex",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "author": "Evergreen Wang <vincentwang.720@gmail.com> ()",
   "ava": {
     "failFast": true,
