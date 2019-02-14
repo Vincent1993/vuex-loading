@@ -1,26 +1,160 @@
-const test = require('ava');
+const test = require('ninos')(require('ava'));
+const Vuex = require('vuex');
+const Vue = require('vue');
 
-const Script = require('..');
-const { beforeEach, afterEach } = require('./helpers');
+const createLoadingPlugin = require('..');
 
-test.beforeEach(beforeEach);
-test.afterEach(afterEach);
+Vue.use(Vuex);
 
-test('returns itself', t => {
-  t.true(t.context.script instanceof Script);
+const asyncFn = context => {
+  return new Promise(() => {
+    setTimeout(resolve => {
+      context.commit('ASYNC_SUCCESS');
+      resolve();
+    }, 2000);
+  });
+};
+
+test('default namespace should be @@loading', t => {
+  const store = new Vuex.Store({
+    plugins: [createLoadingPlugin()]
+  });
+
+  t.truthy(store.state['@@loading'], 'aaaaaa');
 });
 
-test('sets a config object', t => {
-  const script = new Script(false);
-  t.true(script instanceof Script);
+test('set custom namespace', t => {
+  const store = new Vuex.Store({
+    plugins: [
+      createLoadingPlugin({
+        namespace: '@@custom-loading'
+      })
+    ]
+  });
+
+  t.truthy(store.state['@@custom-loading']);
+  t.falsy(store.state['@@loading']);
 });
 
-test('renders name', t => {
-  const { script } = t.context;
-  t.is(script.renderName(), 'script');
+test('exited namespace', t => {
+  const error = t.throws(() => {
+    const store = new Vuex.Store({
+      state: {
+        testState: {
+          test: 1
+        }
+      },
+      plugins: [
+        createLoadingPlugin({
+          namespace: 'testState'
+        })
+      ]
+    });
+    t.falsy(store.state['@@loading']);
+  });
+
+  t.is(error.message, 'createLoadingPlugin: testState exited in current store');
 });
 
-test('sets a default name', t => {
-  const { script } = t.context;
-  t.is(script._name, 'script');
+test('async action', async t => {
+  const store = new Vuex.Store({
+    state: {
+      count: 1
+    },
+    mutations: {
+      ASYNC_SUCCESS(state) {
+        state.count++;
+      }
+    },
+    actions: {
+      add(context) {
+        asyncFn(context);
+      }
+    },
+    plugins: [createLoadingPlugin()]
+  });
+
+  await store.dispatch('add');
+
+  t.deepEqual(store.state['@@loading'], {
+    global: false,
+    effects: {
+      add: false
+    }
+  });
+});
+
+test('includes', async t => {
+  const store = new Vuex.Store({
+    state: {
+      count: 1
+    },
+    mutations: {
+      ASYNC_SUCCESS(state) {
+        state.count++;
+      }
+    },
+    actions: {
+      add(context) {
+        asyncFn(context);
+      },
+      add1(context) {
+        asyncFn(context);
+      }
+    },
+    plugins: [
+      createLoadingPlugin({
+        includes: ['add']
+      })
+    ]
+  });
+
+  await store.dispatch({
+    type: 'add'
+  });
+  await store.dispatch({
+    type: 'add1'
+  });
+
+  t.deepEqual(store.state['@@loading'], {
+    global: false,
+    effects: {
+      add: false
+    }
+  });
+});
+
+test('excludes', async t => {
+  const store = new Vuex.Store({
+    state: {
+      count: 1
+    },
+    mutations: {
+      ASYNC_SUCCESS(state) {
+        state.count++;
+      }
+    },
+    actions: {
+      add(context) {
+        asyncFn(context);
+      },
+      add3(context) {
+        asyncFn(context);
+      }
+    },
+    plugins: [
+      createLoadingPlugin({
+        excludes: ['add']
+      })
+    ]
+  });
+
+  await store.dispatch('add');
+  await store.dispatch('add3');
+  t.deepEqual(store.state['@@loading'], {
+    global: false,
+    effects: {
+      add3: false
+    }
+  });
 });

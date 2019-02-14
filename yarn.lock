@@ -3449,6 +3449,10 @@ nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
 
+ninos@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ninos/-/ninos-2.0.2.tgz#4900452927b2a4367e00c98d3374c32d383315d0"
+
 nlcst-is-literal@^1.0.0, nlcst-is-literal@^1.1.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/nlcst-is-literal/-/nlcst-is-literal-1.1.2.tgz#f941989ca46c6dfc635e96df6b25dcebdb2eb89d"
@@ -5870,6 +5874,10 @@ vfile@^3.0.0:
     replace-ext "1.0.0"
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
+
+vue@^2.6.6:
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.6.tgz#dde41e483c11c46a7bf523909f4f2f816ab60d25"
 
 vuex@^3.1.0:
   version "3.1.0"

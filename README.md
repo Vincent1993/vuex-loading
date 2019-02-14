@@ -15,6 +15,7 @@
 
 * [Install](#install)
 * [Usage](#usage)
+* [API](#api)
 * [Contributors](#contributors)
 * [License](#license)
 
@@ -37,13 +38,22 @@ yarn add @toojs/vuex-loading
 ## Usage
 
 ```js
-const @toojs/vuexLoading = require('@toojs/vuex-loading');
+import createLoadingPlugin from '@toojs/vuex-loading';
 
-const @toojs/vuexLoading = new @toojs/vuexLoading();
-
-console.log(@toojs/vuexLoading.renderName());
-// script
+// default usage
+const store = new Vuex.Store({
+  plugins: [createLoadingPlugin()]
+});
 ```
+
+
+## API
+
+| name      | type      | default                                       | description |
+| :-------- | :-------- | :-------------------------------------------- | :---------- |
+| namespace | string    | '@[**@loading**](https://github.com/loading)' | module name |
+| includes  | string\[] | \[]                                           | -           |
+| excludes  | string\[] | \[]                                           | -           |
 
 
 ## Contributors

@@ -33,10 +33,12 @@
     "fixpack": "latest",
     "husky": "latest",
     "lint-staged": "latest",
+    "ninos": "^2.0.2",
     "nyc": "latest",
     "prettier": "latest",
     "remark-cli": "latest",
     "remark-preset-github": "latest",
+    "vue": "^2.6.6",
     "vuex": "^3.1.0",
     "xo": "latest"
   },
