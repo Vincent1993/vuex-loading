@@ -21,11 +21,17 @@ const createLoadingPlugin = ({
       mutations: {
         SHOW(state, { payload }) {
           state.global = true;
-          state.effects[payload] = true;
+          state.effects = {
+            ...state.effects,
+            [payload]: true
+          }
         },
         HIDE(state, { payload }) {
           state.global = false;
-          state.effects[payload] = false;
+          state.effects = {
+            ...state.effects,
+            [payload]: false
+          }
         }
       }
     });
